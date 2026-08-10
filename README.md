@@ -1,0 +1,240 @@
+# CloudKeeper PreFlight
+
+A read-only assessor for your AWS Organization. Runs from your management
+account and produces one JSON file describing every dependency CloudKeeper
+needs to plan your onboarding.
+
+**Nothing is created. Nothing is deployed. Nothing persistent.** Only
+`Describe*`, `Get*`, `List*` API calls from your CloudShell session.
+
+Source is public — your security team can review it before you run.
+
+## What you'll need
+
+- AWS Console access to your organization's **management account**. Standard
+  `ReadOnlyAccess` is sufficient; most admins have it.
+- A **customer UUID** and your **contact email** — CloudKeeper sends these
+  in a single one-line command.
+- ~1–2 minutes of wall clock.
+
+## Run it (CloudShell — recommended)
+
+Open AWS CloudShell in your management account and paste the one-line
+command CloudKeeper sent you. It looks like this (the UUID and email are
+already substituted in the version you receive):
+
+```bash
+git clone --depth 1 https://github.com/CloudKeeper-Inc/Preflight.git && cd Preflight && python3 -m venv .venv && .venv/bin/pip install --quiet . && .venv/bin/python3 -m cloudkeeper_preflight --customer-uuid <UUID-FROM-CLOUDKEEPER> --customer-emails <YOUR-EMAIL> --api-endpoint https://preflight.cloudkeeper.com/v1/submit 2>&1 | tee run.log
+```
+
+When the run finishes successfully, the last line is:
+
+```
+[Submission] Submitted to https://preflight.cloudkeeper.com/v1/submit (HTTP 201)
+```
+
+That's it — the assessment lands with CloudKeeper automatically. An
+analyst will reach out within one business day.
+
+### Review before submitting
+
+If you'd rather inspect the assessment JSON before sending it to us — for
+example, if your outbound network policy blocks `preflight.cloudkeeper.com`,
+or you want your security team to review — **omit** the `--api-endpoint`
+argument. The tool writes
+`cloudkeeper-preflight-assessment-<uuid>-<timestamp>.json.gz` in the
+working directory instead of submitting. Download it via CloudShell's
+**Actions → Download file** and email it to your CloudKeeper contact.
+
+To inspect locally:
+
+```bash
+gunzip -c cloudkeeper-preflight-assessment-*.json.gz | python3 -m json.tool | less
+```
+
+## What's in the output
+
+- Organization metadata, OU tree, account list with OU paths.
+- All five organization-policy types (SCP / tag / backup / AI-opt-out /
+  chatbot) with content and targets.
+- IAM Identity Center: whether it's in use, in which region, and how many
+  users, groups, permission sets, and account assignments exist. Counts
+  only — no usernames, email addresses, group membership, or policy
+  content is collected.
+- Trusted-access services, delegated administrators, and per-service
+  organization configuration for the 22 org-scoped services PreFlight
+  understands (CloudTrail org trails, GuardDuty delegation, Config org
+  rules and conformance packs, Security Hub CSPM standards and finding
+  aggregators, Macie, Firewall Manager policies, and more).
+- RAM resource shares at the org level — both outbound (owned by an
+  account in your org) and inbound (shared into your org from outside).
+- Existing CloudFormation StackSets (both service-managed and
+  self-managed), excluding any PreFlight has deployed.
+- AWS Config aggregators.
+- Previous month's total cost for the organization, excluding Marketplace
+  and Tax, plus the list of currently active cost-allocation tags. One
+  organization-wide figure — no per-account or per-service breakdown.
+- Resource-based policies in the management account that reference the
+  organization or any OU (S3, SNS, SQS, KMS, Secrets Manager, ECR,
+  EventBridge, Backup, API Gateway, VPC endpoints, OpenSearch, Glue,
+  EFS, SES, Glacier, plus IAM roles and customer-managed policies).
+- **Seller of record** for the management account — which AWS legal
+  entity bills you (from `taxsettings:ListTaxRegistrations`, filtered to
+  the management account). Only the seller name is kept; the VAT/GST
+  registration details the same API returns are discarded.
+- **Budget alerts** — every budget in the management account with its
+  notification thresholds and email / SNS subscribers.
+- **EKS charges over the last 14 days** — checked when IAM Identity
+  Center is in use; flagged when there's non-zero EKS spend. Signals a
+  Kubernetes footprint that shapes the onboarding conversation.
+- A `management_account_coverage_gaps` list of `(service, operation)`
+  pairs we couldn't read. Usually SCP denials — expected — and tells us
+  where to ask follow-up questions.
+
+## Troubleshooting
+
+| Symptom | Likely cause | Fix |
+|---|---|---|
+| `Bootstrap done` then a long-looking pause | Normal — Phase 1 runs the 12 management-account scanners in parallel. | Wait ~30–60 seconds; per-scanner summaries print as they finish. |
+| Many `AccessDenied` entries in the run log | Your SCPs denied some scanner calls; each is captured under `management_account_coverage_gaps`. | No action needed. |
+| `[Submission] HTTP 403` | The customer UUID isn't whitelisted (or has been disabled). | Ping your CloudKeeper contact. |
+| `[Submission] HTTP 429` — cooldown-active | Same UUID submitted less than 5 minutes ago. | Wait and retry, or your contact re-runs from their end. |
+| `[Submission] Saved cloudkeeper-preflight-...` | The submission POST failed for any reason (network, backend outage, etc.) and the tool fell back to local. | Download the `.json.gz` (CloudShell → Actions → Download file) and email it to your CloudKeeper contact. |
+| `ERROR: PreFlight must be run in the management account of the organization.` | You ran this in a member account by mistake. | Sign in to the management account and re-run. The error message tells you the correct management account ID and root email. |
+
+## Deeper assessment (member accounts too)
+
+When CloudKeeper specifically asks for the deeper assessment that also
+inspects every member account, see **[MEMBER_ASSESSMENT.md](MEMBER_ASSESSMENT.md)**.
+That mode is opt-in and deploys a temporary read-only IAM role in each
+member account via CloudFormation StackSets. It is not part of the
+default onboarding flow.
+
+## FAQ
+
+### Security & access
+
+**Q: Is it really read-only?**
+Yes. The tool makes only `Describe*`, `Get*`, `List*` API calls. Source
+is public at https://github.com/CloudKeeper-Inc/Preflight — your security
+team can grep for `create_`, `put_`, `update_`, `delete_` and confirm no
+such calls exist against your account. Standard `ReadOnlyAccess` is
+sufficient; nothing broader.
+
+**Q: Does it deploy any resources, create IAM roles, or leave anything
+behind?**
+No. In the default management-account-only mode there are zero writes —
+no CloudFormation stacks, no StackSets, no IAM roles, no S3 buckets.
+When it finishes, the only footprint is a shell-history entry in
+CloudShell and a burst of `Describe*` / `Get*` / `List*` entries in
+CloudTrail — the same shape as any admin poking around the console.
+
+**Q: Can it touch my member accounts?**
+Not in this mode. The command you're given is scoped to the management
+account only. The deeper member-account assessment lives in a separate
+mode ([MEMBER_ASSESSMENT.md](MEMBER_ASSESSMENT.md)) that is opt-in and
+not part of the default flow.
+
+**Q: What credentials does it use?**
+Whatever your CloudShell session inherits — your AWS Console identity.
+It never asks for or handles long-lived access keys, and you don't need
+to create any IAM role for CloudKeeper.
+
+**Q: Will it trigger my GuardDuty / SIEM / Security Hub?**
+Unlikely. It's a burst of standard read APIs from a CloudShell IP. If
+your SIEM specifically alerts on high-volume `List*` from a new IP,
+whitelist the CloudShell egress or expect a benign notification. No IAM
+changes, no privileged actions.
+
+### Data & privacy
+
+**Q: What data leaves my environment?**
+The output JSON contains: your Org ID, account IDs and names,
+root-user emails on your accounts, OU tree, policy content (SCPs / tag /
+backup / AI-opt-out / chatbot policies verbatim), IAM Identity Center
+object counts, RAM share ARNs, StackSet names, per-service organization
+configuration (CloudTrail trail names + S3 buckets, GuardDuty detector
+IDs, Config aggregator names, Security Hub standards, etc.), your
+organization's previous-month total spend, budget subscribers, seller of
+record, and cost-allocation tag keys.
+
+**Not captured:** KMS key material, secret values, IAM access keys,
+resource-level tags on individual EC2/RDS instances, or any of your
+application data. Also deliberately not captured: IAM Identity Center
+usernames, email addresses, group membership, and permission-set policy
+documents (we take counts only); per-account or per-service cost
+breakdowns (only the organization total); and your VAT/GST registration
+details (only the AWS seller name).
+
+**Q: Where does the data go?**
+POSTed over TLS 1.2+ to `preflight.cloudkeeper.com/v1/submit`. Stored in
+an encrypted-at-rest S3 bucket (AES-256, versioned, block-public-access,
+TLS-enforcing bucket policy) in the CloudKeeper AWS account. Access is
+limited to CloudKeeper analysts on `onboarding@cloudkeeper.com`.
+
+**Q: How long is it retained?**
+90 days in warm storage, then Glacier for the balance of ~1 year. You
+can request deletion at any time by replying to your CloudKeeper contact.
+
+**Q: Are you sending anything to third parties (Anthropic / OpenAI)?**
+A **reduced summary** of your assessment goes to Amazon Bedrock (Claude
+Sonnet 5, hosted in the CloudKeeper AWS account in `us-east-1`) so we
+can auto-draft the post-assessment onboarding email. The summary contains
+counts and identifiers (Org ID, account IDs, policy counts, list of
+org-scoped services in use) — no policy JSON, no per-resource content,
+no secrets. The full assessment JSON never leaves CloudKeeper's AWS
+account.
+
+**Q: Can I inspect the output before it's sent?**
+Yes. See the "Review before submitting" section above — omit
+`--api-endpoint` and the tool writes a local `.json.gz` file instead of
+submitting.
+
+### Operational
+
+**Q: Do I need to install anything?**
+Just AWS CloudShell (no installation on your side — CloudShell has
+Python 3, `boto3`, and your console credentials pre-loaded). If you'd
+rather run locally: Python 3.8+, clone the public repo, `pip install .`,
+and AWS credentials configured for your management account.
+
+**Q: How long does it take?**
+1–2 minutes for a typical org, up to 3–5 for a very large one. No
+impact on production — read APIs only.
+
+**Q: What if my SCPs block some of the calls?**
+Handled gracefully. `AccessDenied` errors are captured as
+`management_account_coverage_gaps` in the output; the run continues.
+Genuine transient errors (network blips, transient AWS 500s) retry up
+to 5 times with adaptive backoff.
+
+**Q: What if it fails mid-run?**
+No cleanup on your side — nothing has been created. Just re-run the
+command; it's idempotent.
+
+**Q: What does it cost me?**
+Trivial. AWS Cost Explorer API charges apply (~$0.02 per run for the
+two `GetCostAndUsage` calls). All other APIs used — Organizations, IAM
+Identity Center, Budgets, tax settings, Config, RAM, StackSets — are
+free reads.
+
+### Follow-up
+
+**Q: What happens after I submit?**
+Within one business day, an analyst reviews the assessment and sends you
+a structured onboarding email covering: what we found, actions you need
+to take before we can take over management (e.g. reinstating closed
+accounts, exporting Cost Explorer history), and reconfiguration
+recommendations for org-scoped services — presented as three options
+(CloudKeeper Prism / CloudKeeper does the reconfiguration for you via a
+scoped IAM role / your team does it, with per-service walk-throughs).
+We then schedule a call to work through anything ambiguous.
+
+**Q: Is this optional?**
+No — running PreFlight is a prerequisite for onboarding. It's the
+concrete data we need to plan the transition without a lengthy
+back-and-forth on org structure and dependencies.
+
+## License
+
+Apache-2.0. See [LICENSE](LICENSE).
