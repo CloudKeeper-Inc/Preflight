@@ -1,0 +1,700 @@
+{
+  "metadata": {
+    "customer_uuid": "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee",
+    "customer_emails": ["ryan.marsh@synthco.example", "sean@synthco.example"],
+    "assessment_timestamp": "2026-07-10T09:30:00.000000+00:00",
+    "tool_version": "1.2.0",
+    "execution_duration_seconds": 168.42,
+    "management_account_id": "100000000001",
+    "errors": [
+      {
+        "module": "service_configurations",
+        "operation": "DescribeOrganizationConfiguration",
+        "code": "AccessDeniedException",
+        "message": "User is not authorised to perform inspector2:DescribeOrganizationConfiguration",
+        "service": "inspector2"
+      },
+      {
+        "module": "resource_policy_scanner",
+        "operation": "GetBucketPolicy",
+        "code": "NoSuchBucketPolicy",
+        "message": "The bucket policy does not exist for bucket 'legacy-audit-artifacts'",
+        "service": "s3",
+        "region": "us-east-1"
+      }
+    ],
+    "throttling_event_count": 2,
+    "stackset_provision_failed_accounts": []
+  },
+
+  "organization": {
+    "org_id": "o-synth0001x",
+    "org_arn": "arn:aws:organizations::100000000001:organization/o-synth0001x",
+    "feature_set": "ALL",
+    "master_account_id": "100000000001",
+    "master_account_email": "aws-root@synthco.example",
+    "root_id": "r-abcd",
+    "root_name": "Root",
+    "ou_tree": [
+      {
+        "ou_id": "ou-abcd-workloads",
+        "ou_name": "Workloads",
+        "parent_id": "r-abcd",
+        "children": [
+          {
+            "ou_id": "ou-abcd-prod",
+            "ou_name": "Prod",
+            "parent_id": "ou-abcd-workloads",
+            "children": []
+          },
+          {
+            "ou_id": "ou-abcd-nonprod",
+            "ou_name": "NonProd",
+            "parent_id": "ou-abcd-workloads",
+            "children": []
+          }
+        ]
+      },
+      {
+        "ou_id": "ou-abcd-security",
+        "ou_name": "Security",
+        "parent_id": "r-abcd",
+        "children": []
+      },
+      {
+        "ou_id": "ou-abcd-sandbox",
+        "ou_name": "Sandbox",
+        "parent_id": "r-abcd",
+        "children": []
+      }
+    ],
+    "all_ou_ids": [
+      "ou-abcd-workloads",
+      "ou-abcd-prod",
+      "ou-abcd-nonprod",
+      "ou-abcd-security",
+      "ou-abcd-sandbox"
+    ]
+  },
+
+  "region_selection": {
+    "strategy": "cost_filtered",
+    "threshold": 1.0,
+    "currency": "USD",
+    "period": {"start": "2026-06-01", "end": "2026-07-01"},
+    "enabled_region_count": 17,
+    "always_assessed": ["us-east-1"],
+    "region_costs": {
+      "us-east-1": 24110.2,
+      "us-west-2": 9880.55,
+      "eu-west-1": 3215.4,
+      "ap-south-1": 0.64,
+      "eu-central-1": 0.0
+    },
+    "non_regional_cost": 4076.76,
+    "selected_regions": ["eu-west-1", "us-east-1", "us-west-2"],
+    "skipped_regions": [
+      "ap-northeast-1", "ap-northeast-2", "ap-northeast-3", "ap-south-1",
+      "ap-southeast-1", "ap-southeast-2", "ca-central-1", "eu-central-1",
+      "eu-north-1", "eu-west-2", "eu-west-3", "sa-east-1", "us-east-2",
+      "us-west-1"
+    ]
+  },
+
+  "accounts": [
+    {"account_id": "100000000001", "name": "SynthCo-Management", "email": "aws-root@synthco.example",   "status": "ACTIVE",    "joined_method": "INVITED", "joined_timestamp": "2024-01-15T10:00:00+00:00", "ou_id": "r-abcd",           "ou_path": "Root"},
+    {"account_id": "200000000222", "name": "SynthCo-Security",   "email": "aws-sec@synthco.example",    "status": "ACTIVE",    "joined_method": "CREATED", "joined_timestamp": "2024-02-01T10:00:00+00:00", "ou_id": "ou-abcd-security", "ou_path": "Root / Security"},
+    {"account_id": "200000000609", "name": "SynthCo-Network",    "email": "aws-net@synthco.example",    "status": "ACTIVE",    "joined_method": "CREATED", "joined_timestamp": "2024-02-01T10:00:00+00:00", "ou_id": "ou-abcd-prod",     "ou_path": "Root / Workloads / Prod"},
+    {"account_id": "200000000710", "name": "SynthCo-Prod-Web",   "email": "aws-prod-web@synthco.example","status": "ACTIVE",   "joined_method": "CREATED", "joined_timestamp": "2024-03-01T10:00:00+00:00", "ou_id": "ou-abcd-prod",     "ou_path": "Root / Workloads / Prod"},
+    {"account_id": "200000000711", "name": "SynthCo-Prod-Data",  "email": "aws-prod-data@synthco.example","status": "ACTIVE",  "joined_method": "CREATED", "joined_timestamp": "2024-03-01T10:00:00+00:00", "ou_id": "ou-abcd-prod",     "ou_path": "Root / Workloads / Prod"},
+    {"account_id": "200000000820", "name": "SynthCo-Stage",      "email": "aws-stage@synthco.example",  "status": "ACTIVE",    "joined_method": "CREATED", "joined_timestamp": "2024-04-01T10:00:00+00:00", "ou_id": "ou-abcd-nonprod",  "ou_path": "Root / Workloads / NonProd"},
+    {"account_id": "200000000821", "name": "SynthCo-Dev",        "email": "aws-dev@synthco.example",    "status": "ACTIVE",    "joined_method": "CREATED", "joined_timestamp": "2024-04-01T10:00:00+00:00", "ou_id": "ou-abcd-nonprod",  "ou_path": "Root / Workloads / NonProd"},
+    {"account_id": "200000000930", "name": "SynthCo-Sandbox-Ryan","email": "aws-sbx-ryan@synthco.example","status": "ACTIVE",  "joined_method": "CREATED", "joined_timestamp": "2024-06-01T10:00:00+00:00", "ou_id": "ou-abcd-sandbox",  "ou_path": "Root / Sandbox"},
+    {"account_id": "200000000931", "name": "SynthCo-Sandbox-Sean","email": "aws-sbx-sean@synthco.example","status": "ACTIVE",  "joined_method": "CREATED", "joined_timestamp": "2024-06-01T10:00:00+00:00", "ou_id": "ou-abcd-sandbox",  "ou_path": "Root / Sandbox"},
+    {"account_id": "200000000410", "name": "SynthCo-Legacy-A",   "email": "aws-legacy-a@synthco.example","status": "CLOSED",    "joined_method": "CREATED", "joined_timestamp": "2023-05-01T10:00:00+00:00", "ou_id": "ou-abcd-sandbox",  "ou_path": "Root / Sandbox"},
+    {"account_id": "200000000411", "name": "SynthCo-Legacy-B",   "email": "aws-legacy-b@synthco.example","status": "CLOSED",    "joined_method": "CREATED", "joined_timestamp": "2023-05-01T10:00:00+00:00", "ou_id": "ou-abcd-sandbox",  "ou_path": "Root / Sandbox"},
+    {"account_id": "200000000412", "name": "SynthCo-Legacy-C",   "email": "aws-legacy-c@synthco.example","status": "SUSPENDED", "joined_method": "CREATED", "joined_timestamp": "2023-05-01T10:00:00+00:00", "ou_id": "ou-abcd-sandbox",  "ou_path": "Root / Sandbox"}
+  ],
+
+  "trusted_access": [
+    {"service_principal": "cloudtrail.amazonaws.com",                       "date_enabled": "2024-01-16T10:00:00+00:00"},
+    {"service_principal": "guardduty.amazonaws.com",                        "date_enabled": "2024-02-15T10:00:00+00:00"},
+    {"service_principal": "config.amazonaws.com",                           "date_enabled": "2024-03-01T10:00:00+00:00"},
+    {"service_principal": "ram.amazonaws.com",                              "date_enabled": "2024-03-10T10:00:00+00:00"},
+    {"service_principal": "sso.amazonaws.com",                              "date_enabled": "2024-01-20T10:00:00+00:00"},
+    {"service_principal": "securityhub.amazonaws.com",                      "date_enabled": "2024-04-01T10:00:00+00:00"},
+    {"service_principal": "macie.amazonaws.com",                            "date_enabled": "2024-05-01T10:00:00+00:00"},
+    {"service_principal": "fms.amazonaws.com",                              "date_enabled": "2024-06-01T10:00:00+00:00"},
+    {"service_principal": "backup.amazonaws.com",                           "date_enabled": "2024-06-15T10:00:00+00:00"},
+    {"service_principal": "member.org.stacksets.cloudformation.amazonaws.com", "date_enabled": "2024-01-20T10:00:00+00:00"},
+    {"service_principal": "account.amazonaws.com",                          "date_enabled": "2024-01-15T10:00:00+00:00"},
+    {"service_principal": "billing-cost-management.amazonaws.com",          "date_enabled": "2024-01-15T10:00:00+00:00"}
+  ],
+
+  "delegated_administrators": [
+    {
+      "account_id": "200000000222",
+      "name": "SynthCo-Security",
+      "email": "aws-sec@synthco.example",
+      "services": [
+        {"service_principal": "guardduty.amazonaws.com",   "date_delegated": "2024-02-15T10:00:00+00:00"},
+        {"service_principal": "securityhub.amazonaws.com", "date_delegated": "2024-04-01T10:00:00+00:00"},
+        {"service_principal": "macie.amazonaws.com",       "date_delegated": "2024-05-01T10:00:00+00:00"}
+      ]
+    },
+    {
+      "account_id": "200000000609",
+      "name": "SynthCo-Network",
+      "email": "aws-net@synthco.example",
+      "services": [
+        {"service_principal": "config.amazonaws.com",     "date_delegated": "2024-03-01T10:00:00+00:00"},
+        {"service_principal": "ipam.amazonaws.com",       "date_delegated": "2024-03-15T10:00:00+00:00"}
+      ]
+    }
+  ],
+
+  "policies": {
+    "service_control_policies": [
+      {
+        "id": "p-scp-001", "name": "DenyLeaveOrganization", "description": "Prevent members from leaving the org",
+        "type": "SERVICE_CONTROL_POLICY", "aws_managed": false,
+        "content": {"Version": "2012-10-17", "Statement": [{"Effect": "Deny", "Action": "organizations:LeaveOrganization", "Resource": "*"}]},
+        "targets": [{"target_id": "r-abcd", "type": "ROOT", "name": "Root"}]
+      },
+      {
+        "id": "p-scp-002", "name": "DenyRegionsExceptApproved", "description": "Only allow us-east-1, us-west-2, eu-west-1",
+        "type": "SERVICE_CONTROL_POLICY", "aws_managed": false,
+        "content": {"Version": "2012-10-17", "Statement": [{"Effect": "Deny", "Action": "*", "Resource": "*", "Condition": {"StringNotEquals": {"aws:RequestedRegion": ["us-east-1", "us-west-2", "eu-west-1"]}}}]},
+        "targets": [{"target_id": "ou-abcd-workloads", "type": "ORGANIZATIONAL_UNIT", "name": "Workloads"}]
+      },
+      {
+        "id": "p-scp-003", "name": "DenyRootUserActions", "description": "Prevent root-user actions in member accounts",
+        "type": "SERVICE_CONTROL_POLICY", "aws_managed": false,
+        "content": {"Version": "2012-10-17", "Statement": [{"Effect": "Deny", "Action": "*", "Resource": "*", "Condition": {"StringLike": {"aws:PrincipalArn": "arn:aws:iam::*:root"}}}]},
+        "targets": [{"target_id": "r-abcd", "type": "ROOT", "name": "Root"}]
+      },
+      {
+        "id": "p-FullAWSAccess", "name": "FullAWSAccess", "description": "AWS-managed baseline",
+        "type": "SERVICE_CONTROL_POLICY", "aws_managed": true,
+        "content": {"Version": "2012-10-17", "Statement": [{"Effect": "Allow", "Action": "*", "Resource": "*"}]},
+        "targets": [{"target_id": "r-abcd", "type": "ROOT", "name": "Root"}]
+      }
+    ],
+    "tag_policies": [
+      {
+        "id": "p-tag-001", "name": "RequireCostCenterTag", "description": "Enforce CostCenter tag on all resources",
+        "type": "TAG_POLICY", "aws_managed": false,
+        "content": {"tags": {"CostCenter": {"tag_key": {"@@assign": "CostCenter"}, "enforced_for": {"@@assign": ["ec2:instance", "rds:db"]}}}},
+        "targets": [{"target_id": "ou-abcd-workloads", "type": "ORGANIZATIONAL_UNIT", "name": "Workloads"}]
+      }
+    ],
+    "backup_policies": [
+      {
+        "id": "p-bak-001", "name": "DailyProdBackups", "description": "Nightly backup for prod EBS+RDS",
+        "type": "BACKUP_POLICY", "aws_managed": false,
+        "content": {"plans": {"DailyProd": {"regions": {"@@assign": ["us-east-1"]}, "rules": {"NightlyToVault": {"schedule_expression": {"@@assign": "cron(0 5 * * ? *)"}, "target_backup_vault_name": {"@@assign": "central-vault"}, "lifecycle": {"delete_after_days": {"@@assign": "35"}}}}}}},
+        "targets": [{"target_id": "ou-abcd-prod", "type": "ORGANIZATIONAL_UNIT", "name": "Prod"}]
+      }
+    ],
+    "ai_opt_out_policies": [
+      {
+        "id": "p-ai-001", "name": "OptOutAllAIServices", "description": "Opt out of AI-service data usage org-wide",
+        "type": "AISERVICES_OPT_OUT_POLICY", "aws_managed": false,
+        "content": {"services": {"default": {"opt_out_policy": {"@@assign": "optOut"}}}},
+        "targets": [{"target_id": "r-abcd", "type": "ROOT", "name": "Root"}]
+      }
+    ],
+    "chatbot_policies": [
+      {
+        "id": "p-chat-001", "name": "DenySlackChannelChanges", "description": "Prevent members changing Slack integrations",
+        "type": "CHATBOT_POLICY", "aws_managed": false,
+        "content": {"chatbot": {"platforms": {"slack": {"channel_configuration": {"@@assign": "deny"}}}}},
+        "targets": [{"target_id": "ou-abcd-workloads", "type": "ORGANIZATIONAL_UNIT", "name": "Workloads"}]
+      }
+    ]
+  },
+
+  "identity_center": {
+    "enabled": true,
+    "region": "us-east-1",
+    "instance_arn": "arn:aws:sso:::instance/ssoins-synth0001",
+    "identity_store_id": "d-9067001abc",
+    "user_count": 5,
+    "group_count": 3,
+    "permission_set_count": 3,
+    "account_assignment_count": 5,
+    "enabled_application_count": 3,
+    "customer_managed_application_count": 2,
+    "enabled_applications": [
+      {
+        "application_arn": "arn:aws:sso::100000000001:application/ssoins-synth0001/apl-syntha0001",
+        "name": "Salesforce Prod",
+        "description": "Salesforce SSO for sales org",
+        "application_provider_arn": "arn:aws:sso::aws:applicationProvider/custom-saml",
+        "is_customer_managed": true,
+        "status": "ENABLED",
+        "visibility": "ENABLED",
+        "assignment_required": true,
+        "assigned_user_count": 0,
+        "assigned_group_count": 2
+      },
+      {
+        "application_arn": "arn:aws:sso::100000000001:application/ssoins-synth0001/apl-syntha0002",
+        "name": "GitHub Enterprise",
+        "description": "GitHub SSO for engineering",
+        "application_provider_arn": "arn:aws:sso::aws:applicationProvider/custom",
+        "is_customer_managed": true,
+        "status": "ENABLED",
+        "visibility": "ENABLED",
+        "assignment_required": true,
+        "assigned_user_count": 3,
+        "assigned_group_count": 1
+      },
+      {
+        "application_arn": "arn:aws:sso::100000000001:application/ssoins-synth0001/apl-syntha0003",
+        "name": "SageMaker Studio (synthco-data)",
+        "description": "Auto-created by SageMaker Studio Domain",
+        "application_provider_arn": "arn:aws:sso::aws:applicationProvider/sagemakerstudio",
+        "is_customer_managed": false,
+        "status": "ENABLED",
+        "visibility": "ENABLED",
+        "assignment_required": true,
+        "assigned_user_count": 4,
+        "assigned_group_count": 1
+      }
+    ]
+  },
+
+  "billing": {
+    "period": {"start": "2026-06-01", "end": "2026-07-01"},
+    "total_cost_excluding_marketplace_and_tax": 41283.55,
+    "currency": "USD",
+    "cost_allocation_tags": [
+      {"tag_key": "CostCenter",  "type": "UserDefined", "last_updated": "2025-04-14T10:15:17Z"},
+      {"tag_key": "Environment", "type": "UserDefined", "last_updated": "2025-04-14T10:15:17Z"},
+      {"tag_key": "Team",        "type": "UserDefined", "last_updated": "2025-04-14T10:15:17Z"},
+      {"tag_key": "aws:eks:namespace", "type": "AWSGenerated", "last_updated": "2025-04-14T10:15:17Z"},
+      {"tag_key": "aws:eks:cluster-name", "type": "AWSGenerated", "last_updated": "2025-04-14T10:15:17Z"}
+    ]
+  },
+
+  "ram_shares": {
+    "resource_shares": [
+      {
+        "region": "us-east-1", "resource_share_arn": "arn:aws:ram:us-east-1:200000000609:resource-share/tgw-prod",
+        "name": "tgw-prod-share", "owner_id": "200000000609", "direction": "outbound", "status": "ACTIVE",
+        "allow_external_principals": false,
+        "resources": [{"arn": "arn:aws:ec2:us-east-1:200000000609:transit-gateway/tgw-0aaaaa", "type": "ec2:TransitGateway", "status": "AVAILABLE"}],
+        "principals": [{"id": "o-synth0001x", "type": "ORGANIZATION"}],
+        "is_org_dependent": true
+      },
+      {
+        "region": "us-east-1", "resource_share_arn": "arn:aws:ram:us-east-1:200000000609:resource-share/tgw-nonprod",
+        "name": "tgw-nonprod-share", "owner_id": "200000000609", "direction": "outbound", "status": "ACTIVE",
+        "allow_external_principals": false,
+        "resources": [{"arn": "arn:aws:ec2:us-east-1:200000000609:transit-gateway/tgw-0bbbbb", "type": "ec2:TransitGateway", "status": "AVAILABLE"}],
+        "principals": [{"id": "ou-abcd-nonprod", "type": "ORGANIZATIONAL_UNIT"}],
+        "is_org_dependent": true
+      },
+      {
+        "region": "us-east-1", "resource_share_arn": "arn:aws:ram:us-east-1:100000000001:resource-share/prefix-list-share",
+        "name": "corp-prefix-list", "owner_id": "100000000001", "direction": "outbound", "status": "ACTIVE",
+        "allow_external_principals": false,
+        "resources": [{"arn": "arn:aws:ec2:us-east-1:100000000001:prefix-list/pl-0abc", "type": "ec2:PrefixList", "status": "AVAILABLE"}],
+        "principals": [{"id": "o-synth0001x", "type": "ORGANIZATION"}],
+        "is_org_dependent": true
+      },
+      {
+        "region": "us-east-1", "resource_share_arn": "arn:aws:ram:us-east-1:999888777666:resource-share/vendor-inbound",
+        "name": "vendor-vpc-share", "owner_id": "999888777666", "direction": "inbound", "status": "ACTIVE",
+        "allow_external_principals": true,
+        "resources": [{"arn": "arn:aws:ec2:us-east-1:999888777666:subnet/subnet-0zzz", "type": "ec2:Subnet", "status": "AVAILABLE"}],
+        "principals": [{"id": "200000000710", "type": "ACCOUNT"}],
+        "is_org_dependent": false
+      }
+    ]
+  },
+
+  "stacksets": {
+    "service_managed": [
+      {"stack_set_id": "org-guardrails:00000000", "name": "org-guardrails", "description": "Baseline read-only IAM roles + Config recorder", "permission_model": "SERVICE_MANAGED", "auto_deployment": {"Enabled": true, "RetainStacksOnAccountRemoval": false}, "capabilities": ["CAPABILITY_NAMED_IAM"]},
+      {"stack_set_id": "org-cloudwatch:00000000", "name": "org-cloudwatch-agents", "description": "Deploy CW agent config", "permission_model": "SERVICE_MANAGED", "auto_deployment": {"Enabled": true, "RetainStacksOnAccountRemoval": false}, "capabilities": []}
+    ],
+    "self_managed": [
+      {"stack_set_id": "legacy-vpc:11111111", "name": "legacy-vpc-flowlogs", "description": "Older per-account VPC flow-log stackset", "permission_model": "SELF_MANAGED", "capabilities": []}
+    ]
+  },
+
+  "config_aggregators": [
+    {"region": "us-east-1", "name": "org-config-aggregator", "arn": "arn:aws:config:us-east-1:200000000609:config-aggregator/config-aggregator-abcdef", "type": "ORGANIZATION", "role_arn": "arn:aws:iam::200000000609:role/aws-service-role/config.amazonaws.com.aws-service-role/AWSServiceRoleForConfig", "source_regions": [], "all_regions": true}
+  ],
+
+  "service_configurations": {
+    "cloudtrail.amazonaws.com": {
+      "organization_trails": [
+        {"name": "OrgTrail", "trail_arn": "arn:aws:cloudtrail:us-east-1:100000000001:trail/OrgTrail", "s3_bucket": "synthco-orgtrail-logs", "s3_key_prefix": "orgtrail", "kms_key_id": "arn:aws:kms:us-east-1:100000000001:key/aaaa-bbbb", "cloudwatch_log_group": "arn:aws:logs:us-east-1:100000000001:log-group:CloudTrail/OrgTrail:*", "home_region": "us-east-1", "is_multi_region": true, "include_global_service_events": true}
+      ]
+    },
+    "guardduty.amazonaws.com": {
+      "detectors_by_region": [
+        {"region": "us-east-1", "detectors": [{"detector_id": "d-us-east-1-abcd", "status": "ENABLED", "finding_publishing_frequency": "FIFTEEN_MINUTES", "features": [{"Name": "S3_DATA_EVENTS", "Status": "ENABLED"}, {"Name": "EKS_AUDIT_LOGS", "Status": "ENABLED"}]}]},
+        {"region": "us-west-2", "detectors": [{"detector_id": "d-us-west-2-abcd", "status": "ENABLED", "finding_publishing_frequency": "FIFTEEN_MINUTES", "features": []}]}
+      ],
+      "admin_accounts": [{"account_id": "200000000222", "status": "ENABLED"}]
+    },
+    "securityhub.amazonaws.com": {
+      "hubs_by_region": [
+        {"region": "us-east-1", "enabled": true, "hub_arn": "arn:aws:securityhub:us-east-1:100000000001:hub/default", "subscribed_at": "2024-04-01T10:00:00Z", "auto_enable_controls": true,
+         "enabled_standards": [
+           {"standards_arn": "arn:aws:securityhub:::ruleset/aws-foundational-security-best-practices/v/1.0.0", "standards_subscription_arn": "arn:aws:securityhub:us-east-1:100000000001:subscription/aws-foundational-security-best-practices/v/1.0.0", "status": "READY"},
+           {"standards_arn": "arn:aws:securityhub:us-east-1::standards/cis-aws-foundations-benchmark/v/1.4.0", "standards_subscription_arn": "arn:aws:securityhub:us-east-1:100000000001:subscription/cis-aws-foundations-benchmark/v/1.4.0", "status": "READY"}
+         ],
+         "finding_aggregators": [
+           {"finding_aggregator_arn": "arn:aws:securityhub:us-east-1:100000000001:finding-aggregator/synth-agg", "aggregation_region": "us-east-1", "region_linking_mode": "ALL_REGIONS", "regions": []}
+         ]},
+        {"region": "us-west-2", "enabled": true, "hub_arn": "arn:aws:securityhub:us-west-2:100000000001:hub/default", "subscribed_at": "2024-04-01T10:00:00Z", "auto_enable_controls": true,
+         "enabled_standards": [
+           {"standards_arn": "arn:aws:securityhub:::ruleset/aws-foundational-security-best-practices/v/1.0.0", "standards_subscription_arn": "arn:aws:securityhub:us-west-2:100000000001:subscription/aws-foundational-security-best-practices/v/1.0.0", "status": "READY"}
+         ],
+         "finding_aggregators": []}
+      ],
+      "admin_accounts": [{"account_id": "200000000222", "status": "ENABLED"}],
+      "cspm_active": true
+    },
+    "config.amazonaws.com": {
+      "by_region": [
+        {"region": "us-east-1", "rules": [
+          {"name": "org-required-tags", "arn": "arn:aws:config:us-east-1:200000000609:organization-config-rule/org-required-tags-ab12", "excluded_accounts": ["200000000930", "200000000931"], "last_update_time": "2025-05-01T10:00:00Z"},
+          {"name": "org-s3-public-block", "arn": "arn:aws:config:us-east-1:200000000609:organization-config-rule/org-s3-public-block-cd34", "excluded_accounts": [], "last_update_time": "2025-05-01T10:00:00Z"}
+        ], "conformance_packs": [
+          {"name": "org-operational-best-practices", "arn": "arn:aws:config:us-east-1:200000000609:organization-conformance-pack/org-operational-best-practices-ef56", "delivery_s3_bucket": "synthco-config-conformance"}
+        ]},
+        {"region": "us-west-2", "rules": [], "conformance_packs": []}
+      ]
+    },
+    "config-multiaccountsetup.amazonaws.com": {"by_region": []},
+    "inspector2.amazonaws.com": {"auto_enable": {"ec2": true, "ecr": true, "lambda": false}, "max_account_limit_reached": false},
+    "macie.amazonaws.com": {
+      "by_region": [
+        {"region": "us-east-1", "auto_enable": true, "max_account_limit_reached": false},
+        {"region": "us-west-2", "auto_enable": true, "max_account_limit_reached": false}
+      ]
+    },
+    "fms.amazonaws.com": {
+      "admin_account": "200000000222", "role_status": "READY",
+      "policies": [
+        {"policy_arn": "arn:aws:fms:us-east-1:200000000222:policy/waf-baseline", "policy_id": "waf-baseline-abcd", "policy_name": "waf-baseline", "resource_type": "AWS::ElasticLoadBalancingV2::LoadBalancer", "security_service_type": "WAFV2"},
+        {"policy_arn": "arn:aws:fms:us-east-1:200000000222:policy/sg-audit",     "policy_id": "sg-audit-efgh",     "policy_name": "sg-audit",     "resource_type": "AWS::EC2::SecurityGroup",                    "security_service_type": "SECURITY_GROUPS_USAGE_AUDIT"}
+      ]
+    },
+    "access-analyzer.amazonaws.com": {
+      "by_region": [
+        {"region": "us-east-1", "analyzers": [
+          {"name": "org-analyzer", "arn": "arn:aws:access-analyzer:us-east-1:200000000222:analyzer/org-analyzer", "status": "ACTIVE", "last_resource_analyzed": "arn:aws:s3:::synthco-orgtrail-logs", "last_resource_analyzed_at": "2026-07-08T00:00:00Z"}
+        ]}
+      ]
+    },
+    "backup.amazonaws.com": {"global_settings": {"isCrossAccountBackupEnabled": "true"}},
+    "ssm.amazonaws.com": {
+      "service_settings": [
+        {"setting_id": "/ssm/managed-instance/default-ec2-instance-management-role", "value": "service-role/AmazonSSMRoleForInstancesQuickSetup", "status": "Customized", "last_modified": "2025-01-01T10:00:00Z"},
+        {"setting_id": "/ssm/automation/customer-script-log-destination",              "value": "CloudWatch",                                        "status": "Customized", "last_modified": "2025-01-01T10:00:00Z"},
+        {"setting_id": "/ssm/parameter-store/high-throughput-enabled",                  "value": "true",                                              "status": "Customized", "last_modified": "2025-01-01T10:00:00Z"}
+      ]
+    },
+    "detective.amazonaws.com": {"by_region": [{"region": "us-east-1", "graphs": [{"arn": "arn:aws:detective:us-east-1:200000000222:graph:abcdef", "created_time": "2025-01-01T10:00:00Z"}], "admin_accounts": [{"account_id": "200000000222"}]}]},
+    "compute-optimizer.amazonaws.com": {"enrollment_status": "Active", "member_accounts_enrolled": true, "include_member_accounts": true},
+    "health.amazonaws.com": {"enabled": true, "delegated_admins": []},
+    "license-manager.amazonaws.com": {"organization_settings": {"OrganizationConfiguration": {"EnableIntegration": true}}},
+    "ipam.amazonaws.com": {"by_region": [{"region": "us-east-1", "ipams": [{"ipam_id": "ipam-0abc", "operating_regions": ["us-east-1", "us-west-2"]}]}]},
+    "auditmanager.amazonaws.com": {"delegated_admin_account": "200000000222", "account_status": "ACTIVE"},
+    "servicecatalog.amazonaws.com": {"portfolio_share_type": "AWS_ORGANIZATIONS", "by_region": []},
+    "devops-guru.amazonaws.com": {"account_health": {"OrganizationalUnitIds": ["ou-abcd-prod"]}},
+    "storage-lens.s3.amazonaws.com": {"configurations": [{"id": "org-storage-lens", "account_level": true}]},
+    "reporting.trustedadvisor.amazonaws.com": {"delegated_admin_account": null},
+    "cost-optimization-hub.bcm.amazonaws.com": {"enrollment_status": "Active"},
+    "account.amazonaws.com": {"primary_contact_editable": false, "alternate_contacts_configured": ["BILLING", "OPERATIONS", "SECURITY"]},
+    "unhandled_services": ["some-future-service.amazonaws.com"]
+  },
+
+  "seller_of_record": {
+    "seller": "Amazon Web Services, Inc."
+  },
+
+  "budget_alerts": [
+    {
+      "budget_name": "Monthly Org Budget", "budget_type": "COST", "time_unit": "MONTHLY",
+      "budget_limit": {"amount": "45000.0", "unit": "USD"}, "cost_filters": null, "cost_types": null,
+      "notifications": [
+        {"notification_type": "ACTUAL", "comparison_operator": "GREATER_THAN", "threshold": 80.0, "threshold_type": "PERCENTAGE", "notification_state": "OK",
+         "subscribers": [{"type": "EMAIL", "address": "finance@synthco.example"}, {"type": "EMAIL", "address": "aws-alerts@synthco.example"}]},
+        {"notification_type": "FORECASTED", "comparison_operator": "GREATER_THAN", "threshold": 100.0, "threshold_type": "PERCENTAGE", "notification_state": "OK",
+         "subscribers": [{"type": "EMAIL", "address": "finance@synthco.example"}]}
+      ]
+    },
+    {
+      "budget_name": "Sandbox Cap", "budget_type": "COST", "time_unit": "MONTHLY",
+      "budget_limit": {"amount": "500.0", "unit": "USD"}, "cost_filters": {"LinkedAccount": ["200000000930", "200000000931"]}, "cost_types": null,
+      "notifications": [
+        {"notification_type": "ACTUAL", "comparison_operator": "GREATER_THAN", "threshold": 50.0, "threshold_type": "PERCENTAGE", "notification_state": "ALARM",
+         "subscribers": [{"type": "EMAIL", "address": "aws-sandbox-owners@synthco.example"}]}
+      ]
+    }
+  ],
+
+  "eks_charges": {
+    "checked": true,
+    "period": {"start": "2026-06-24", "end": "2026-07-08", "days": 14},
+    "total_cost": 4238.71,
+    "currency": "USD",
+    "per_account": [
+      {"account_id": "200000000710", "cost": 2418.10},
+      {"account_id": "200000000711", "cost": 1820.61}
+    ],
+    "flag": true
+  },
+
+  "eks_access": {
+    "checked": true,
+    "clusters_scanned": 3,
+    "clusters_with_sso_access_entries": [
+      {
+        "region": "us-east-1",
+        "cluster_name": "synthco-prod",
+        "cluster_arn": "arn:aws:eks:us-east-1:100000000001:cluster/synthco-prod",
+        "authentication_mode": "API_AND_CONFIG_MAP",
+        "sso_references": [
+          {
+            "principal_arn": "arn:aws:iam::100000000001:role/aws-reserved/sso.amazonaws.com/us-east-1/AWSReservedSSO_AdministratorAccess_1a2b3c4d",
+            "kubernetes_groups": ["system:masters"],
+            "type": "STANDARD",
+            "access_policies": [
+              {"policy_arn": "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy", "access_scope": {"type": "cluster"}}
+            ],
+            "matches": [
+              {"type": "sso_role", "value": "AWSReservedSSO_AdministratorAccess_1a2b3c4d", "context": "aws-reserved/sso.amazonaws.com/us-east-1/AWSReservedSSO_AdministratorAccess_1a2b3c4d"}
+            ]
+          },
+          {
+            "principal_arn": "arn:aws:iam::100000000001:role/aws-reserved/sso.amazonaws.com/us-east-1/AWSReservedSSO_ReadOnlyAccess_9f8e7d6c",
+            "kubernetes_groups": ["view"],
+            "type": "STANDARD",
+            "access_policies": [
+              {"policy_arn": "arn:aws:eks::aws:cluster-access-policy/AmazonEKSViewPolicy", "access_scope": {"type": "namespace", "namespaces": ["default", "kube-system"]}}
+            ],
+            "matches": [
+              {"type": "sso_role", "value": "AWSReservedSSO_ReadOnlyAccess_9f8e7d6c", "context": "aws-reserved/sso.amazonaws.com/us-east-1/AWSReservedSSO_ReadOnlyAccess_9f8e7d6c"}
+            ]
+          }
+        ]
+      }
+    ],
+    "clusters_needing_configmap_inspection": [
+      {
+        "region": "us-east-1",
+        "cluster_name": "synthco-prod",
+        "cluster_arn": "arn:aws:eks:us-east-1:100000000001:cluster/synthco-prod",
+        "authentication_mode": "API_AND_CONFIG_MAP",
+        "note": "aws-auth ConfigMap is in the auth path — inspect via `kubectl -n kube-system get cm aws-auth -o yaml` for AWSReservedSSO_* mappings; not enumerable via AWS API"
+      },
+      {
+        "region": "us-west-2",
+        "cluster_name": "synthco-legacy",
+        "cluster_arn": "arn:aws:eks:us-west-2:200000000710:cluster/synthco-legacy",
+        "authentication_mode": "CONFIG_MAP",
+        "note": "aws-auth ConfigMap is in the auth path — inspect via `kubectl -n kube-system get cm aws-auth -o yaml` for AWSReservedSSO_* mappings; not enumerable via AWS API"
+      }
+    ]
+  },
+
+  "management_account_org_references": {
+    "s3": [
+      {
+        "resource_arn": "arn:aws:s3:::synthco-orgtrail-logs",
+        "matches": [
+          {"type": "org_id", "value": "o-synth0001x", "context": "Condition\":{\"StringEquals\":{\"aws:PrincipalOrgID\":\"o-synth0001x\"}}}]}"},
+          {"type": "condition_key", "value": "aws:PrincipalOrgID", "context": "\":[{\"Principal\":\"*\",\"Condition\":{\"StringEquals\":{\"aws:PrincipalOrgID\":\"o-synth0001x\"}}}]}"}
+        ]
+      },
+      {
+        "resource_arn": "arn:aws:s3:::synthco-shared-artifacts",
+        "matches": [
+          {"type": "org_id", "value": "o-synth0001x", "context": "ForAnyValue:StringLike\":{\"aws:PrincipalOrgPaths\":\"o-synth0001x/r-abcd/ou-abcd-prod/*\"}}}]}"},
+          {"type": "condition_key", "value": "aws:PrincipalOrgPaths", "context": "ipal\":\"*\",\"Condition\":{\"ForAnyValue:StringLike\":{\"aws:PrincipalOrgPaths\":\"o-synth0001x/r-abcd/ou-abcd-prod/*\"}}}]}"}
+        ]
+      },
+      {
+        "resource_arn": "arn:aws:s3:::synthco-analytics-exports",
+        "matches": [
+          {"type": "sso_role", "value": "AWSReservedSSO_AdministratorAccess_1a2b3c4d", "context": "001:role/aws-reserved/sso.amazonaws.com/us-east-1/AWSReservedSSO_AdministratorAccess_1a2b3c4d\", \"arn:aws:iam::100000000001:role/aws-reserved/ss"},
+          {"type": "sso_role", "value": "AWSReservedSSO_ReadOnlyAccess_9f8e7d6c", "context": "001:role/aws-reserved/sso.amazonaws.com/us-east-1/AWSReservedSSO_ReadOnlyAccess_9f8e7d6c\"]}, \"Action\": \"s3:GetObject\"}]}"}
+        ]
+      }
+    ],
+    "sns": [
+      {
+        "resource_arn": "arn:aws:sns:us-east-1:100000000001:org-events",
+        "matches": [
+          {"type": "org_id", "value": "o-synth0001x", "context": "Condition\":{\"StringEquals\":{\"aws:PrincipalOrgID\":\"o-synth0001x\"}}}]}"},
+          {"type": "condition_key", "value": "aws:PrincipalOrgID", "context": "{\"Statement\":[{\"Condition\":{\"StringEquals\":{\"aws:PrincipalOrgID\":\"o-synth0001x\"}}}]}"}
+        ]
+      }
+    ],
+    "sqs": [
+      {
+        "resource_arn": "arn:aws:sqs:us-east-1:100000000001:org-inbox",
+        "matches": [
+          {"type": "org_id", "value": "o-synth0001x", "context": "Condition\":{\"StringEquals\":{\"aws:PrincipalOrgID\":\"o-synth0001x\"}}}]}"},
+          {"type": "condition_key", "value": "aws:PrincipalOrgID", "context": "{\"Statement\":[{\"Condition\":{\"StringEquals\":{\"aws:PrincipalOrgID\":\"o-synth0001x\"}}}]}"}
+        ]
+      }
+    ],
+    "lambda": [],
+    "kms": [
+      {
+        "resource_arn": "arn:aws:kms:us-east-1:100000000001:key/aaaa-bbbb",
+        "matches": [
+          {"type": "org_id", "value": "o-synth0001x", "context": "Condition\":{\"StringEquals\":{\"aws:PrincipalOrgID\":\"o-synth0001x\"}}}]}"},
+          {"type": "condition_key", "value": "aws:PrincipalOrgID", "context": "{\"Statement\":[{\"Condition\":{\"StringEquals\":{\"aws:PrincipalOrgID\":\"o-synth0001x\"}}}]}"}
+        ]
+      },
+      {
+        "resource_arn": "arn:aws:kms:us-east-1:100000000001:key/cccc-dddd",
+        "matches": [
+          {"type": "org_id", "value": "o-synth0001x", "context": "dition\": {\"StringEquals\": {\"aws:PrincipalOrgID\": \"o-synth0001x\"}}}]}"},
+          {"type": "sso_role", "value": "AWSReservedSSO_AdministratorAccess_1a2b3c4d", "context": "001:role/aws-reserved/sso.amazonaws.com/us-east-1/AWSReservedSSO_AdministratorAccess_1a2b3c4d\"}, \"Action\": \"kms:Decrypt\", \"Condition\": {\"String"},
+          {"type": "condition_key", "value": "aws:PrincipalOrgID", "context": "\": \"kms:Decrypt\", \"Condition\": {\"StringEquals\": {\"aws:PrincipalOrgID\": \"o-synth0001x\"}}}]}"}
+        ]
+      }
+    ],
+    "ecr": [],
+    "secrets_manager": [
+      {
+        "resource_arn": "arn:aws:secretsmanager:us-east-1:100000000001:secret:shared/db-creds-abcde",
+        "matches": [
+          {"type": "org_id", "value": "o-synth0001x", "context": "Condition\":{\"StringEquals\":{\"aws:PrincipalOrgID\":\"o-synth0001x\"}}}]}"},
+          {"type": "condition_key", "value": "aws:PrincipalOrgID", "context": "{\"Statement\":[{\"Condition\":{\"StringEquals\":{\"aws:PrincipalOrgID\":\"o-synth0001x\"}}}]}"}
+        ]
+      }
+    ],
+    "eventbridge": [
+      {
+        "resource_arn": "arn:aws:events:us-east-1:100000000001:event-bus/default",
+        "matches": [
+          {"type": "org_id", "value": "o-synth0001x", "context": "Condition\":{\"StringEquals\":{\"aws:PrincipalOrgID\":\"o-synth0001x\"}}}]}"},
+          {"type": "condition_key", "value": "aws:PrincipalOrgID", "context": "{\"Statement\":[{\"Condition\":{\"StringEquals\":{\"aws:PrincipalOrgID\":\"o-synth0001x\"}}}]}"}
+        ]
+      }
+    ],
+    "backup": [],
+    "api_gateway": [],
+    "vpc_endpoints": [
+      {
+        "resource_arn": "arn:aws:ec2:us-east-1:100000000001:vpc-endpoint/vpce-0abc",
+        "matches": [
+          {"type": "org_id", "value": "o-synth0001x", "context": "Condition\":{\"StringEquals\":{\"aws:PrincipalOrgID\":\"o-synth0001x\"}}}]}"},
+          {"type": "condition_key", "value": "aws:PrincipalOrgID", "context": "{\"Statement\":[{\"Condition\":{\"StringEquals\":{\"aws:PrincipalOrgID\":\"o-synth0001x\"}}}]}"}
+        ]
+      }
+    ],
+    "opensearch": [],
+    "glue": [],
+    "efs": [],
+    "ses": [],
+    "glacier": [],
+    "iam_roles": [
+      {
+        "resource_arn": "arn:aws:iam::100000000001:role/CrossOrgReadRole",
+        "matches": [
+          {"type": "org_id", "value": "o-synth0001x", "context": "Condition\":{\"StringEquals\":{\"aws:PrincipalOrgID\":\"o-synth0001x\"}}}]}"},
+          {"type": "condition_key", "value": "aws:PrincipalOrgID", "context": "{\"Statement\":[{\"Condition\":{\"StringEquals\":{\"aws:PrincipalOrgID\":\"o-synth0001x\"}}}]}"}
+        ]
+      }
+    ],
+    "iam_policies": [
+      {
+        "resource_arn": "arn:aws:iam::100000000001:policy/DenySSORoleEscalation",
+        "matches": [
+          {"type": "sso_role_path", "value": "aws-reserved/sso.amazonaws.com/*", "context": "ction\": \"iam:*\", \"Resource\": \"arn:aws:iam::*:role/aws-reserved/sso.amazonaws.com/*\"}]}"}
+        ]
+      }
+    ]
+  },
+
+  "management_account_coverage_gaps": [
+    {"service": "inspector2", "operation": "DescribeOrganizationConfiguration", "denied_call_count": 1}
+  ],
+
+  "member_accounts": {
+    "200000000710": {
+      "assessment_status": "assessed",
+      "assumed_at": "2026-07-10T09:31:20+00:00",
+      "iam": {
+        "customer_managed_policies_count": 42,
+        "roles_with_org_ref_trust_policy": [
+          {"role_name": "CrossAccountReadRole", "trust_org_id": "o-synth0001x"}
+        ],
+        "inline_role_policies_with_org_ref": []
+      },
+      "ram_shares": [
+        {"region": "us-east-1", "resource_share_arn": "arn:aws:ram:us-east-1:200000000710:resource-share/prod-vpc-share", "name": "prod-vpc-share", "direction": "outbound", "is_org_dependent": true, "resources": [{"type": "ec2:Subnet"}]}
+      ],
+      "resource_policies": {"s3": [{"resource": "arn:aws:s3:::prod-web-artifacts", "org_refs": ["o-synth0001x"], "ou_refs": []}]},
+      "eks_access": {
+        "checked": true,
+        "clusters_scanned": 2,
+        "clusters_with_sso_access_entries": [
+          {
+            "region": "us-east-1",
+            "cluster_name": "prod-web",
+            "cluster_arn": "arn:aws:eks:us-east-1:200000000710:cluster/prod-web",
+            "authentication_mode": "API",
+            "sso_references": [
+              {
+                "principal_arn": "arn:aws:iam::200000000710:role/aws-reserved/sso.amazonaws.com/us-east-1/AWSReservedSSO_DevOpsAccess_5b6c7d8e",
+                "kubernetes_groups": ["system:masters"],
+                "type": "STANDARD",
+                "access_policies": [
+                  {"policy_arn": "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy", "access_scope": {"type": "cluster"}}
+                ],
+                "matches": [
+                  {"type": "sso_role", "value": "AWSReservedSSO_DevOpsAccess_5b6c7d8e", "context": "aws-reserved/sso.amazonaws.com/us-east-1/AWSReservedSSO_DevOpsAccess_5b6c7d8e"}
+                ]
+              }
+            ]
+          }
+        ],
+        "clusters_needing_configmap_inspection": [
+          {
+            "region": "us-west-2",
+            "cluster_name": "prod-analytics",
+            "cluster_arn": "arn:aws:eks:us-west-2:200000000710:cluster/prod-analytics",
+            "authentication_mode": "CONFIG_MAP",
+            "note": "aws-auth ConfigMap is in the auth path — inspect via `kubectl -n kube-system get cm aws-auth -o yaml` for AWSReservedSSO_* mappings; not enumerable via AWS API"
+          }
+        ]
+      },
+      "delegated_services": {},
+      "coverage_gaps": []
+    },
+    "200000000222": {
+      "assessment_status": "assessed",
+      "assumed_at": "2026-07-10T09:31:35+00:00",
+      "iam": {"customer_managed_policies_count": 12, "roles_with_org_ref_trust_policy": [], "inline_role_policies_with_org_ref": []},
+      "ram_shares": [],
+      "resource_policies": {},
+      "eks_access": {
+        "checked": true,
+        "clusters_scanned": 0,
+        "clusters_with_sso_access_entries": [],
+        "clusters_needing_configmap_inspection": []
+      },
+      "delegated_services": {
+        "guardduty.amazonaws.com": {"auto_enable_ec2": true, "auto_enable_eks": true, "member_account_count": 8},
+        "securityhub.amazonaws.com": {"auto_enable_controls": true, "member_account_count": 8},
+        "macie.amazonaws.com": {"auto_enable": true, "member_account_count": 8}
+      },
+      "coverage_gaps": []
+    }
+  }
+}
