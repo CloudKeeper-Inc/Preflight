@@ -1,0 +1,51 @@
+# Internal source materials (never publish)
+PreflightPlan.pdf
+reconfig-criteria.md
+sample-email.pdf
+sample.json
+CloudKeeper-Replication-Role.yml
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+*.egg
+.eggs/
+develop-eggs/
+downloads/
+sdist/
+wheels/
+share/python-wheels/
+.installed.cfg
+MANIFEST
+
+# Virtualenvs
+.venv/
+venv/
+env/
+ENV/
+
+# Tooling
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+
+# Editors / OS
+.idea/
+.vscode/
+.DS_Store
+
+# Preflight runtime artifacts
+cloudkeeper-preflight-assessment-*.json.gz
+run.log
+nohup.out
